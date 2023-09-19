@@ -1,1 +1,2 @@
 D:\kozinDxLib\x64\Debug\kozinDxLib.exe
+C:\kozinDxlib\kozinDxLib\x64\Debug\kozinDxLib.exe
