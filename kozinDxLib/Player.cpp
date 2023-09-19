@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Game.h"
 #include "DxLib.h"
+#include <cmath>
 
 //Playerで使用する定数
 namespace
@@ -22,11 +23,9 @@ namespace
 
 Player::Player() :
 	m_handle(-1),
-	m_posX(Game::kScreenWidth / 2),
-	m_posY(Game::kScreenHeight / 2),
+	m_pos(Game::kScreenWidth / 2, Game::kScreenHeight / 2),
 	m_dir(kDirDown),
-	m_warkAnimFrame(0),
-	m_warkAnimCount(0)
+	m_warkAnimFrame(0)
 {
 }
 
@@ -46,31 +45,61 @@ void Player::Update()
 	//パッドの十字キーを使用してプレイヤーを移動させる
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 	bool isMove = false;   //移動中かどうか
+	//移動量を持つようにする
+	Vec2 move{ 0.0f, 0.0f };
 
 	if (pad & PAD_INPUT_UP)
 	{
-		m_posY -= kSpeed;
+		//m_pos.y -= kSpeed;
+		move.y -= kSpeed;
 		m_dir = kDirUp;
 		isMove = true;
 	}
 	if (pad & PAD_INPUT_DOWN)
 	{
-		m_posY += kSpeed;
+		//m_pos.y += kSpeed;
+		move.y += kSpeed;
 		m_dir = kDirDown;
 		isMove = true;
 	}
 	if (pad & PAD_INPUT_LEFT)
 	{
-		m_posX -= kSpeed;
+		//m_pos.x -= kSpeed;
+		move.x -= kSpeed;
 		m_dir = kDirLeft;
 		isMove = true;
 	}
 	if (pad & PAD_INPUT_RIGHT)
 	{
-		m_posX += kSpeed;
+		//m_pos.x += kSpeed;
+		move.x += kSpeed;
 		m_dir = kDirRight;
 		isMove = true;
 	}
+
+
+	//斜め移動の場合でも同じ速さで移動するようにする
+	
+	//ベクトルの正規化を行うためにベクトルの長さを求める
+	float moveLength = move.length();	
+
+	//moveLength(ベクトルの長さ)が0.0になる可能性がある	
+
+	if (moveLength > 0.0f)
+	{
+		//斜め移動の場合も同じ速さで移動するようにする
+		//ベクトルの正規化
+		move.normalize();
+		//ベクトルの長さをkSpeedにする
+		//move.x *= kSpeed;
+		//move.y *= kSpeed;
+		move = move.mul(kSpeed);
+
+		//座標とベクトルの足し算
+		//m_pos.x += move.x;
+		//m_pos.y += move.y;
+		m_pos = m_pos.plus(move);
+	}	
 
 	if (isMove)
 	{
@@ -104,7 +133,7 @@ void Player::Draw() const
 		break;
 	}
 #endif
-	DrawRectGraph(static_cast<int>(m_posX), static_cast<int>(m_posY),
+	DrawRectGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y),
 		srcX, srcY, kWidth, kHeight, m_handle, true);
 
 }

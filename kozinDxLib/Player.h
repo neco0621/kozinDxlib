@@ -1,4 +1,6 @@
 #pragma once
+#include "Vec2.h"
+
 class Player
 {
 public:
@@ -24,9 +26,8 @@ public:
 
 private:
 	int m_handle;   //グラフィックのハンドル
-
-	float m_posX;
-	float m_posY;
+	//表示位置
+	Vec2 m_pos;
 	//向いている方向
 	Dir m_dir;
 	//歩きアニメーション
