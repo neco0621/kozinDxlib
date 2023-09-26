@@ -2,6 +2,7 @@
 
 class Player;
 class EnemyRight;
+class EnemyToPlayer;
 class Bg;
 class SceneMain
 {
@@ -12,7 +13,7 @@ public:
 	void Init();
 	void End();
 	void Update();
-	void Draw() const;
+	void Draw();
 private:
 	static constexpr int kEnemyNum = 16;
 
@@ -28,6 +29,7 @@ private:
 	//敵キャラクター
 	//EnemyRight* m_pEnemyRight;
 	EnemyRight* m_pEnemyRight[kEnemyNum];
+	EnemyToPlayer* m_pEnemyToPlayer[kEnemyNum];
 
 	int m_enemyFrameCount;
 

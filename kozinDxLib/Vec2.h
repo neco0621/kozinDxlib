@@ -1,62 +1,93 @@
 #pragma once
-#include <cmath>
+#include<cmath>
 
-//ベクトルを便利に使うためのクラス
+// 2次元ベクトル
 class Vec2
 {
-
 public:
 	float x;
 	float y;
 
 public:
-	Vec2() :
-		x(0.0f),
-		y(0.0f)
+	Vec2()
 	{
+		x = 0.0f;
+		y = 0.0f;
+	}
+	Vec2(float posX, float posY)
+	{
+		x = posX;
+		y = posY;
 	}
 
-	Vec2(float posX, float posY) :
-		x(posX),
-		y(posY)
+	// Vec2 = (Vec2 += Vec2)
+	Vec2 operator += (const Vec2& vec)
 	{
+		x += vec.x;
+		y += vec.y;
+		return *this;
 	}
 
-	//足し算
-	Vec2 plus(Vec2 vec)
+	// Vec2 = Vec2 + Vec2
+	Vec2 operator+(const Vec2& vec) const
 	{
-		Vec2 result{ x + vec.x, y + vec.y };
-		return result;
-	}
-	//掛け算
-	Vec2 mul(float scale)
-	{
-		Vec2 result{ x * scale, y * scale };
-		return result;
+		Vec2 temp{ x + vec.x, y + vec.y };
+		return temp;
 	}
 
-	//ベクトルの長さの2乗を求める
-	float sqLength()
+	// Vec2 = Vec2 + 
+	Vec2 operator-(const Vec2& vec) const
 	{
-		return x * x + y * y;
+		Vec2 temp{ x - vec.x, y - vec.y };
+		return temp;
 	}
-	//ベクトルの長さを求める
+
+	// Vec2 = Vec2 * float
+	Vec2 operator*(float scale) const
+	{
+		Vec2 temp{ x * scale,y * scale };
+		return temp;
+	}
+
+	// Vec2 = Vec2 *= float
+	Vec2 operator*=(float scale)
+	{
+		x *= scale;
+		y *= scale;
+		return *this;
+	}
+
+	// Vec2 = Vec2 / float
+	Vec2 operator/(float scale) const
+	{
+		Vec2 temp{ x / scale,y / scale };
+		return temp;
+	}
+
+	// Vec2 = (Vec2 /= float)
+	Vec2 operator/=(float scale)
+	{
+		x /= scale;
+		y /= scale;
+		return *this;
+	}
+
+	// 長さの取得
 	float length()
 	{
-		return sqrtf(sqLength());
+		return sqrtf((x * x) + (y * y));
 	}
 
-	//自身の正規化を行う
+	// 正規化 Vec2 = Vec2.normalese()
 	void normalize()
 	{
 		float len = length();
-		if (len > 0.0f)
+		if (len == 0)
 		{
-			x /= len;
-			y /= len;
+			return;
 		}
-		//長さ0の場合は何もしない
+		x /= len;
+		y /= len;
 	}
-
 };
 

@@ -9,9 +9,7 @@ namespace
 
 EnemyRight::EnemyRight() :
 	m_handle(-1),
-	m_isExist(false),
-	m_posX(static_cast<float>(GetRand(Game::kScreenWidth))),
-	m_posY(static_cast<float>(GetRand(Game::kScreenHeight)))
+	m_isExist(false)
 {
 }
 
@@ -28,25 +26,47 @@ void EnemyRight::Update()
 	//‘¶İ‚µ‚È‚¢“G‚Ìˆ—‚Í‚µ‚È‚¢
 	if (!m_isExist) return;
 
-	m_posX -= kSpeed;
+	m_pos += m_vec;
 
 	//‰æ–ÊŠO‚Éo‚½‚ç‘¶İ‚ğ‚¯‚·
 	int width = 0;
 	int height = 0;
 	GetGraphSize(m_handle, &width, &height);
 
-	if (m_posX < 0.0f - width)
+	//"¶‚ÉˆÚ“®‚µ‚Ä‚¢‚é“G‚ª"‰æ–Ê¶‚©‚çŠ®‘S‚Éo‚«‚Á‚½“G‚ğÁ‚·
+
+	if ((m_vec.x < 0.0f) &&			//¶‚ÉˆÚ“®‚µ‚Ä‚¢‚é“G
+		(m_pos.x < 0.0f - width))	//¶‚©‚ç‰æ–ÊŠO‚Éo‚½
+	{
+		m_isExist = false;
+	}
+
+	//"‰E‚ÉˆÚ“®‚µ‚Ä‚¢‚é“G‚ª"‰æ–Ê‰E‚©‚çŠ®‘S‚Éo‚«‚Á‚½“G‚ğÁ‚·
+	if ((m_vec.x > 0.0f) &&				//¶‚ÉˆÚ“®‚µ‚Ä‚¢‚é“G
+		(m_pos.x > Game::kScreenWidth))	//¶‚©‚ç‰æ–ÊŠO‚Éo‚½
+	{
+		m_isExist = false;
+	}
+	//"ã‚ÉˆÚ“®‚µ‚Ä‚¢‚é“G‚ª"‰æ–Êã‚©‚çŠ®‘S‚Éo‚«‚Á‚½“G‚ğÁ‚·
+	if ((m_vec.y < 0.0f) &&					//¶‚ÉˆÚ“®‚µ‚Ä‚¢‚é“G
+		(m_pos.y < 0.0f - height))	//¶‚©‚ç‰æ–ÊŠO‚Éo‚½
+	{
+		m_isExist = false;
+	}
+	//"‰º‚ÉˆÚ“®‚µ‚Ä‚¢‚é“G‚ª"‰æ–Ê‰º‚©‚çŠ®‘S‚Éo‚«‚Á‚½“G‚ğÁ‚·
+	if ((m_vec.y > 0.0f) &&					//¶‚ÉˆÚ“®‚µ‚Ä‚¢‚é“G
+		(m_pos.y > Game::kScreenWidth))		//¶‚©‚ç‰æ–ÊŠO‚Éo‚½
 	{
 		m_isExist = false;
 	}
 }
 
-void EnemyRight::Draw() const
+void EnemyRight::Draw()
 {
 	//‘¶İ‚µ‚È‚¢“G‚Í•`‰æ‚µ‚È‚¢
 	if (!m_isExist) return;
 
-	DrawGraph(static_cast<int>(m_posX), static_cast<int>(m_posY), m_handle, false);
+	DrawGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_handle, false);
 }
 
 void EnemyRight::Start()
@@ -57,6 +77,6 @@ void EnemyRight::Start()
 	GetGraphSize(m_handle, &width, &height);
 
 
-	m_posX = static_cast<float>(Game::kScreenWidth);
-	m_posY = static_cast<float>(Game::kScreenHeight);
+	m_pos.x = static_cast<float>(Game::kScreenWidth);
+	m_pos.y = static_cast<float>(Game::kScreenHeight);
 }

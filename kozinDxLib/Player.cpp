@@ -93,12 +93,12 @@ void Player::Update()
 		//ベクトルの長さをkSpeedにする
 		//move.x *= kSpeed;
 		//move.y *= kSpeed;
-		move = move.mul(kSpeed);
+		move *=kSpeed;
 
 		//座標とベクトルの足し算
 		//m_pos.x += move.x;
 		//m_pos.y += move.y;
-		m_pos = m_pos.plus(move);
+		m_pos +=move;
 	}	
 
 	if (isMove)
@@ -109,7 +109,7 @@ void Player::Update()
 	}
 }
 
-void Player::Draw() const
+void Player::Draw()
 {
 	int animFrame = m_warkAnimFrame / kAnimFrameNum;
 

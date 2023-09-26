@@ -1,4 +1,5 @@
 #pragma once
+#include "Vec2.h"
 //右から出現する敵のクラス
 class EnemyRight
 {
@@ -8,12 +9,12 @@ public:
 
 	void Init();
 	void Update();
-	void Draw() const;
+	void Draw();
 
 	//メンバー変数にアクセスする
 	void SetHandle(int handle) { m_handle = handle; }
 
-	bool isExist() const { return m_isExist; }
+	bool isExist() { return m_isExist; }
 
 	//敵キャラクターをスタートさせる
 	void Start();
@@ -23,7 +24,8 @@ private:
 
 	bool m_isExist; //存在するかフラグ(使用中かどうか)
 
-	float m_posX;
-	float m_posY;
+	Vec2 m_pos;
+	Vec2 m_vec;
+	
 };
 

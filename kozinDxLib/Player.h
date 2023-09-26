@@ -9,10 +9,12 @@ public:
 
 	void Init();
 	void Update();
-	void Draw() const;
+	void Draw();
 
 	//メンバー変数にアクセスする
 	void SetHandle(int handle) { m_handle = handle; }
+	//プレイヤーの現在位置を取得する
+	Vec2 GetPos() const { return m_pos; }
 
 public:
 	//向いてる方向
