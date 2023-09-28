@@ -120,19 +120,12 @@ void EnemyToPlayer::Start()
 	//ターゲット位置
 	//const Vec2 target = Vec2{ Game::kScreenWidth / 2, Game::kScreenHeight / 2};
 	const Vec2 target = m_pPlayer->GetPos();
-
 	clsDx();
-	printfDx("%f, %f\n", m_pos.x, m_pos.y);
-
-	printfDx("%f, %f\n", target.x, target.y);
-
 	//敵の初期位置からターゲット位置に向かうベクトルを生成
 	//始点から終点に向かうベクトルを求める場合、終点の座標-始点の座標で求める
 	Vec2 toTarget = target - m_pos;
-	printfDx("%f, %f\n", toTarget.x, toTarget.y);
 	//ベクトルの長さをkSpeedにしてやる
 	toTarget.normalize();
-	printfDx("%f, %f", toTarget.x, toTarget.y);
 	//kSpeedでかける
 	m_vec = toTarget * kSpeed;
 }
