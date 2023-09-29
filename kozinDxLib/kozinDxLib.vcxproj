@@ -76,7 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\fko2347078\Downloads\DxLib_VC3_24b\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\_DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir);$(ProjectDir)util;$(ProjectDir)enemy;$(ProjectDir)scene</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -108,7 +108,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\fko2347078\Downloads\DxLib_VC3_24b\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\_DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir);$(ProjectDir)util;$(ProjectDir)enemy;$(ProjectDir)scene</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -136,27 +136,31 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bg.cpp" />
-    <ClCompile Include="EnemyRight.cpp" />
-    <ClCompile Include="EnemyToPlayer.cpp" />
+    <ClCompile Include="EnemyLeft.cpp" />
+    <ClCompile Include="enemy\EnemyBase.cpp" />
+    <ClCompile Include="enemy\EnemyRight.cpp" />
+    <ClCompile Include="enemy\EnemyToPlayer.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Pad.cpp" />
+    <ClCompile Include="util\Pad.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="SceneMain.cpp" />
-    <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="SceneMapEdit.cpp" />
-    <ClCompile Include="Vec2.cpp" />
+    <ClCompile Include="scene\SceneMain.cpp" />
+    <ClCompile Include="scene\SceneManager.cpp" />
+    <ClCompile Include="scene\SceneMapEdit.cpp" />
+    <ClCompile Include="util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bg.h" />
-    <ClInclude Include="EnemyRight.h" />
-    <ClInclude Include="EnemyToPlayer.h" />
+    <ClInclude Include="EnemyLeft.h" />
+    <ClInclude Include="enemy\EnemyBase.h" />
+    <ClInclude Include="enemy\EnemyRight.h" />
+    <ClInclude Include="enemy\EnemyToPlayer.h" />
     <ClInclude Include="game.h" />
-    <ClInclude Include="Pad.h" />
+    <ClInclude Include="util\Pad.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="SceneMain.h" />
-    <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="SceneMapEdit.h" />
-    <ClInclude Include="Vec2.h" />
+    <ClInclude Include="scene\SceneMain.h" />
+    <ClInclude Include="scene\SceneManager.h" />
+    <ClInclude Include="scene\SceneMapEdit.h" />
+    <ClInclude Include="util\Vec2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

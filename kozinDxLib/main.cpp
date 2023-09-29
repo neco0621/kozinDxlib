@@ -1,5 +1,5 @@
 #include "DxLib.h"
-#include "SceneMain.h"
+#include "scene/SceneMain.h"
 #include "Player.h"
 
 // ƒvƒƒOƒ‰ƒ€‚Í WinMain ‚©‚çn‚Ü‚è‚Ü‚·
