@@ -1,0 +1,5 @@
+﻿  EnemyBase.cpp
+C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+C:\kozinDxlib\kozinDxLib\enemy\EnemyBase.cpp(60,47): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\kozinDxlib\kozinDxLib\enemy\EnemyBase.cpp(60,40): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+LINK : fatal error LNK1104: ファイル 'DxDrawFunc_vs2015_x64_MT.lib' を開くことができません。

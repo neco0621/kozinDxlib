@@ -34,17 +34,14 @@ Player::Player() :
 	m_walkAnimFrame(0),
 	m_damageFrame(0)
 {
-
 }
 
 Player::~Player()
 {
-
 }
 
 void Player::Init()
 {
-
 }
 
 void Player::Update()
@@ -106,7 +103,7 @@ void Player::Update()
 	m_pos += move;
 
 	//当たり判定の更新
-	m_colRect.Set(m_pos.x, m_pos.y, kWidth, kHeight);
+	m_colRect.SetCenter(m_pos.x, m_pos.y, kWidth, kHeight);
 
 	if (isMove)
 	{
@@ -139,8 +136,20 @@ void Player::Draw()
 	int srcX = kWidth * kUseFrame[animFrame];
 	int srcY = kHeight * m_dir;
 
-	DrawRectGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y),
-		srcX, srcY, kWidth, kHeight, m_handle, true);
+	//DrawRectGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y),
+		//srcX, srcY, kWidth, kHeight, m_handle, true);
+
+	//DXライブラリにはリファレンスページに書かれてない関数が多数存在する
+	//DxLib.hを確認してそれっぽい関数を探したり検索したりしてみよう
+	DrawRectRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y),
+		srcX, srcY, kWidth, kHeight,
+		1.0, 0.0,
+		m_handle, true, false);
+
+#ifdef _DEBUG
+	//当たり判定の表示
+	m_colRect.Draw(GetColor(0, 0, 255), false);
+#endif
 }
 
 void Player::OnDamage()

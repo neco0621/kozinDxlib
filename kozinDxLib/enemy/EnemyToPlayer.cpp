@@ -35,45 +35,35 @@ void EnemyToPlayer::Update()
 	//当たり判定の更新
 	UpdateCollision();
 
-	////ベクトルをいじってみる
-	////画面中央を超えたら加速する
-	//if (m_pos.x < Game::kScreenWidth / 2)
-	//{
-	//	//移動ベクトルを変化させることで速度を上げる
-	//	//左に移動する量を大きくすることで早く動いているように見せる
-	//	m_vec *= kSpeed;
-	//}
-
 	//画面外に出たら存在を消す
 	int width = 0;
 	int height = 0;
 	GetGraphSize(m_handle, &width, &height);
 
 	//"左に移動している敵が"画面左から完全に出きった敵を消す
-	//if (m_pos.x < 0.0f - width)
 	if ((m_vec.x < 0.0f) &&				//左に移動している敵が 
-		(m_pos.x < 0.0f - width))	//左から画面外に出た
+		(m_pos.x < 0.0f - width / 2))	//左から画面外に出た
 	{
 		m_isExist = false;
 	}
 
 	//"右に移動している敵が"画面右から完全に出きった敵を消す
 	if ((m_vec.x > 0.0f) &&				//右に移動している敵が 
-		(m_pos.x > Game::kScreenWidth))	//右から画面外に出た
+		(m_pos.x > Game::kScreenWidth + width / 2))	//右から画面外に出た
 	{
 		m_isExist = false;
 	}
 
 	//"上に移動している敵が"画面上から完全に出きった敵を消す
 	if ((m_vec.y < 0.0f) &&				//上に移動している敵が 
-		(m_pos.y < 0.0f - height))	//上から画面外に出た
+		(m_pos.y < 0.0f - height / 2))	//上から画面外に出た
 	{
 		m_isExist = false;
 	}
 
 	//"下に移動している敵が"画面下から完全に出きった敵を消す
 	if ((m_vec.y > 0.0f) &&				//下に移動している敵が 
-		(m_pos.y > Game::kScreenHeight))	//下から画面外に出た
+		(m_pos.y > Game::kScreenHeight + height / 2))	//下から画面外に出た
 	{
 		m_isExist = false;
 	}
@@ -96,24 +86,24 @@ void EnemyToPlayer::Start()
 	int num = GetRand(3);
 	switch (num)
 	{
-	case 0:	//上
-		m_pos.x = static_cast<float>(GetRand(Game::kScreenWidth - width));
-		m_pos.y = static_cast<float>(-height);
+	case 0:	//上から
+		m_pos.x = static_cast<float>(GetRand(Game::kScreenWidth - width) + width / 2);
+		m_pos.y = static_cast<float>(-height / 2);
 		break;
 
-	case 1:	//左
-		m_pos.x = static_cast<float>(-width);
-		m_pos.y = static_cast<float>(GetRand(Game::kScreenHeight - height));
+	case 1:	//左から
+		m_pos.x = static_cast<float>(-width / 2);
+		m_pos.y = static_cast<float>(GetRand(Game::kScreenHeight - height) + height / 2);
 		break;
 
-	case 2:	//下
-		m_pos.x = static_cast<float>(GetRand(Game::kScreenWidth - width));
-		m_pos.y = static_cast<float>(Game::kScreenHeight);
+	case 2:	//下から
+		m_pos.x = static_cast<float>(GetRand(Game::kScreenWidth - width) + width / 2);
+		m_pos.y = static_cast<float>(Game::kScreenHeight + height / 2);
 		break;
 
-	case 3:	//右
-		m_pos.x = static_cast<float>(Game::kScreenWidth);
-		m_pos.y = static_cast<float>(GetRand(Game::kScreenHeight - height));
+	case 3:	//右から
+		m_pos.x = static_cast<float>(Game::kScreenWidth + width / 2);
+		m_pos.y = static_cast<float>(GetRand(Game::kScreenHeight - height) + height / 2);
 
 		break;
 

@@ -29,7 +29,11 @@ void EnemyLeft::Update()
 	//当たり判定の更新
 	UpdateCollision();
 
-	if (m_pos.x > Game::kScreenWidth)
+	int width = 0;
+	int height = 0;
+	GetGraphSize(m_handle, &width, &height);
+
+	if (m_pos.x > Game::kScreenWidth + width / 2)
 	{
 		m_isExist = false;
 	}
@@ -39,15 +43,13 @@ void EnemyLeft::Start()
 {
 	//画面中央に敵キャラクターを登場させる
 	m_isExist = true;
-	m_pos.x = Game::kScreenWidth / 2;
-	m_pos.y = Game::kScreenHeight / 2;
 
 	int width = 0;
 	int height = 0;
 	GetGraphSize(m_handle, &width, &height);
 
-	m_pos.x = static_cast<float>(0 - width);
-	m_pos.y = static_cast<float>(GetRand(Game::kScreenHeight - height));
+	m_pos.x = static_cast<float>(0 - width / 2);
+	m_pos.y = static_cast<float>(GetRand(Game::kScreenHeight - height) + height / 2);
 
 	//1フレーム当たりの移動ベクトルを決定する
 	m_vec.x = kSpeed;

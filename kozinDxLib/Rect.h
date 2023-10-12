@@ -1,5 +1,6 @@
 #pragma once
 #include "Vec2.h"
+
 //矩形の座標を管理するクラス
 class Rect
 {
@@ -7,8 +8,14 @@ public:
 	Rect();
 	virtual ~Rect();
 
+	//描画
+	void Draw(unsigned int Color, bool isFill);
+
 	//左上座標と幅高さを指定
-	void Set(float left, float top, float width, float height);
+	void SetLT(float left, float top, float width, float height);
+	//中心座標と幅高さを指定
+	void SetCenter(float x, float y, float width, float height);
+
 	//ゲームによっては中心座標で指定したり足元の座標で指定する
 	//set関数があったほうが便利かもしれない
 
@@ -21,10 +28,10 @@ public:
 	bool IsCollision(const Rect& rect);
 
 private:
-	float m_left;
-	float m_top;
-	float m_right;
-	float m_bottom;
+	float m_left;	//左上のX座標
+	float m_top;	//左上のY座標
+	float m_right;	//右上のX座標
+	float m_bottom;	//右上のY座標
 
 };
 

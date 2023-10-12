@@ -188,7 +188,12 @@ void SceneMain::Update()
 	{
 		m_pShot->Start(m_pPlayer->GetPos());
 	}
-
+#ifdef _DEBUG
+	if (CheckHitKey(KEY_INPUT_1))
+	{
+		m_pShot->Start(m_pPlayer->GetPos());
+	}
+#endif
 }
 
 void SceneMain::Draw()
@@ -197,6 +202,8 @@ void SceneMain::Draw()
 
 	m_pPlayer->Draw();
 
+	m_pShot->Draw();
+
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
 		if (m_pEnemy[i])	//nullptrではないチェック
@@ -204,8 +211,6 @@ void SceneMain::Draw()
 			m_pEnemy[i]->Draw();
 		}
 	}
-	m_pShot->Draw();
-
 
 	//Debag表示
 	DrawString(8, 8, "SceneMain", GetColor(255, 255, 255));

@@ -1,4 +1,5 @@
 #include "Rect.h"
+#include <DxLib.h>
 #include <cassert>
 
 Rect::Rect() :
@@ -7,19 +8,31 @@ Rect::Rect() :
 	m_right(0.0f),
 	m_bottom(0.0f)
 {
-
 }
 
 Rect::~Rect()
 {
 }
 
-void Rect::Set(float left, float top, float width, float height)
+void Rect::Draw(unsigned int color, bool isFill)
+{
+	DrawBox(static_cast<int> (m_left), static_cast<int>(m_top), static_cast<int> (m_right), static_cast<int>(m_bottom), color, isFill);
+}
+
+void Rect::SetLT(float left, float top, float width, float height)
 {
 	m_left = left;			//左上のX座標
 	m_top = top;			//左上のY座標
 	m_right = left + width;	//右下のX座標
 	m_bottom = top + height;//右下のY座標
+}
+
+void Rect::SetCenter(float x, float y, float width, float height)
+{
+	m_left = x - width / 2;			
+	m_top = y - height / 2;			
+	m_right = x + width / 2;	
+	m_bottom = y + height / 2;
 }
 
 float Rect::GetWidth() const

@@ -35,7 +35,7 @@ void EnemyRight::Update()
 	int height = 0;
 	GetGraphSize(m_handle, &width, &height);
 
-	if (m_pos.x < 0.0f - width)
+	if (m_pos.x < 0.0f - width / 2)
 	{
 		m_isExist = false;
 	}
@@ -49,8 +49,8 @@ void EnemyRight::Start()
 	int height = 0;
 	GetGraphSize(m_handle, &width, &height);
 
-	m_pos.x = static_cast<float>(Game::kScreenWidth);
-	m_pos.y = static_cast<float>(GetRand(Game::kScreenHeight - height));
+	m_pos.x = static_cast<float>(Game::kScreenWidth + width / 2);
+	m_pos.y = static_cast<float>(GetRand(Game::kScreenHeight - height) + height / 2);
 
 	//1フレーム当たりの移動ベクトルを決定する
 	m_vec.x = -kSpeed;
