@@ -1,6 +1,6 @@
 #include "DxLib.h"
-#include "scene/SceneMain.h"
-#include "Player.h"
+#include "Game.h"
+#include "scene/SceneManager.h"
 
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -8,21 +8,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// 一部の関数はDxLib_Init()の前に実行する必要がある
 	ChangeWindowMode(true);
 
+	//画面サイズ変更
+	//SetGraphMode(xサイズ,yサイズ,ビット数(16 or 32);
+	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorDepth);
 
 	if (DxLib_Init() == -1)		// ＤＸライブラリ初期化処理
 	{
 		return -1;			// エラーが起きたら直ちに終了
 	}
 
-	
-
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	
-	SceneMain sceneMain;
-	sceneMain.Init();
+	//Scene開始
+	SceneManager* pScene = new SceneManager;
+	pScene->Init();
 
-	//ゲームループ
+	// ゲームループ
 	while (ProcessMessage() != -1)
 	{
 		//このフレームの開始時刻を覚えておく
@@ -32,26 +33,30 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ClearDrawScreen();
 
 		//ゲームの処理
-		sceneMain.Update();
+		pScene->Update();
 
-		sceneMain.Draw();
+		pScene->Draw();
 
-		
 		// 画面が切り替わるのを待つ
 		ScreenFlip();
 
-		//escキーでゲーム終了
+		//escキーでゲームを終了
 		if (CheckHitKey(KEY_INPUT_ESCAPE))
 		{
 			break;
 		}
 
-		//FPS60固定にする
+		//FPS60に固定する
 		while (GetNowHiPerformanceCount() - start < 16667)
 		{
 			//16.66ミリ秒(16667マイクロ秒)経過するまで待つ
 		}
 	}
+	pScene->End();
+
+	//メモリの解放
+	delete pScene;
+	pScene = nullptr;
 
 	DxLib_End();				// ＤＸライブラリ使用の終了処理
 

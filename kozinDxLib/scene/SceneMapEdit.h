@@ -1,5 +1,7 @@
 #pragma once
 #include "Game.h"
+#include "Pad.h"
+
 class SceneMapEdit
 {
 public:
@@ -9,7 +11,7 @@ public:
 	void Init();
 	void End();
 	void Update();
-	void Draw();
+	void Draw() const;
 
 private:
 	//定数
@@ -17,7 +19,7 @@ private:
 	static constexpr int kChipWidth = 32;
 	static constexpr int kChipHeight = 32;
 
-	//チップを置く数   縦15個　横20個
+	//チップを置く数
 	static constexpr int kChipNumX = Game::kScreenWidth / kChipWidth;
 	static constexpr int kChipNumY = Game::kScreenHeight / kChipHeight;
 
@@ -31,15 +33,22 @@ private:
 	//グラフィックに存在するマップチップの数
 	int GetGraphChipNum();
 
-	//テキストファイルとしてマップチップのデータを出力
+	//
 	void OutputText();
-	//テキストファイル読み込みのテスト
+
+	//
 	void InputText();
 
-	//バイナリデータとしてマップデータを出力
+	//
 	void OutputBinary();
-	//バイナリデータを読み込んでマップとして使用する
+
 	void InputBinary();
+
+	void ChipUp(bool isLoop);
+	void ChipDown(bool isLoop);
+
+
+
 
 private:
 	//グラフィックのハンドル
@@ -48,6 +57,7 @@ private:
 	//グラフィックに含まれるマップチップの数
 	int m_graphChipNumX;
 	int m_graphChipNumY;
+
 	//マップチップの配置情報
 	int m_chipData[kChipNumY][kChipNumX];
 
@@ -56,10 +66,12 @@ private:
 	int m_cursorY;
 
 	//カーソル移動のリピート処理
-	int m_rightRipeatFrame;
-	int m_downRipeatFrame;
-	int m_leftRipeatFrame;
-	int m_upRipeatFrame;
+	int m_upRepeatFrame;
+	int m_downRepeatFrame;
+	int m_leftRepeatFrame;
+	int m_rightRepeatFrame;
+
+	int m_upChipRepeatFrame;
+	int m_downChipRepeatFrame;
 
 };
-

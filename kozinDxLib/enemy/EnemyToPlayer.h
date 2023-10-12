@@ -1,38 +1,22 @@
 #pragma once
-#include "Vec2.h"
+#include "EnemyBase.h"
 
 class Player;
-
-class EnemyToPlayer
+//発生位置から発生した時のプレイヤーの位置に向かって移動する
+class EnemyToPlayer : public EnemyBase
 {
 public:
 	EnemyToPlayer();
-	~EnemyToPlayer();
+	virtual ~EnemyToPlayer();
 
-	void Init();
-	void Update();
-	void Draw();
+	virtual void Update() override;
 
 	//メンバー変数にアクセスする
-	void SetHandle(int handle) { m_handle = handle; }
 	void SetPlayer(Player* pPlayer) { m_pPlayer = pPlayer; }
 
-	bool isExist() { return m_isExist; }
-
-	Vec2 GetPos() { return m_pos; }
-	Vec2 GetVec() { return m_vec; }
-
 	//敵キャラクターをスタートさせる
-	void Start();
+	virtual void Start() override;
 
 private:
-	int m_handle;   //グラフィックのハンドル
-
-	bool m_isExist; //存在するかフラグ(使用中かどうか)
-
 	Player* m_pPlayer;
-
-	Vec2 m_pos;
-	Vec2 m_vec;
 };
-

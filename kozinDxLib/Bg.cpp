@@ -75,7 +75,7 @@ void Bg::Init()
 	//マップチップ配置データの読み込み
 	fstream file;
 	//バイナリモードで開く
-	file.open("map/map.bin", ios::in | ios::binary);
+	file.open("data/map/map.bin", ios::in | ios::binary);
 	//ファイルを開くのに失敗した場合の処理
 	if (!file.is_open())
 	{

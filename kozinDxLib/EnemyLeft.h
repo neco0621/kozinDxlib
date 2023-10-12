@@ -1,13 +1,21 @@
 #pragma once
 #include "EnemyBase.h"
-// 作成するクラス名 : public 継承元
-//public以外にもprivate,protectedが使用できる
-class EnemyLeft :	public EnemyBase
+
+//継承の仕方 (継承元クラスをincludeしておくこと)
+//作成するクラス名 : public 継承元クラス名
+//private,protectedがアクセス修飾子としてあるが基本public
+class EnemyLeft : public EnemyBase
 {
 public:
 	EnemyLeft();
-	~EnemyLeft();
+	virtual ~EnemyLeft();
 
-	void Start();
+	//今のところ継承元をそのまま使うので不要
+	//void Init();
+	//void Draw();
+
+	virtual void Update() override;
+
+	virtual void Start() override;
 };
 

@@ -6,11 +6,12 @@ namespace Pad
 	//パッドの更新処理　1フレームに1回行う
 	void Update();
 
-	//押されているかを取得
-	bool isPadPress(int key);
+	//押されているか取得
+	bool IsPress(int key);
 	//押された瞬間を取得
-	bool isPadTrigger(int key);
+	bool IsTrigger(int key);
 	//離した瞬間を取得
-	bool isPadRelase(int key);
-}
+	bool IsRelase(int key);
 
+	bool IsRepeat(int key, int& frame, int RepeatFrame);
+}

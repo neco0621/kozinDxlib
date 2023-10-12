@@ -1,6 +1,7 @@
 #include "Player.h"
-#include "Game.h"
 #include "DxLib.h"
+#include "Game.h"
+
 #include <cmath>
 
 //Playerで使用する定数
@@ -15,61 +16,77 @@ namespace
 
 	//キャラクターのアニメーション
 	constexpr int kUseFrame[] = { 0,1,2,1 };
-	//キャラクター１コマのフレーム数
+
+	//アニメーション1コマのフレーム数
 	constexpr int kAnimFrameNum = 8;
-	//アニメーション１サイクルのフレーム数
+
+	//アニメーション1サイクルのフレーム数
 	constexpr int kAnimFrameCycle = _countof(kUseFrame) * kAnimFrameNum;
+
+	//ダメージ演出フレーム数
+	constexpr int kDamageFrame = 60;
 }
 
 Player::Player() :
 	m_handle(-1),
 	m_pos(Game::kScreenWidth / 2, Game::kScreenHeight / 2),
 	m_dir(kDirDown),
-	m_warkAnimFrame(0)
+	m_walkAnimFrame(0),
+	m_damageFrame(0)
 {
+
 }
 
 Player::~Player()
 {
+
 }
 
 void Player::Init()
 {
+
 }
 
 void Player::Update()
 {
+	//ダメージ演出の進行
+	m_damageFrame--;
+	if (m_damageFrame < 0) m_damageFrame = 0;
 
-
-
-	//パッドの十字キーを使用してプレイヤーを移動させる
+	//padの十字キーを使用してプレイヤーを移動させる
 	int pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-	bool isMove = false;   //移動中かどうか
-	//移動量を持つようにする
-	Vec2 move{ 0.0f, 0.0f };
 
-	if (pad & PAD_INPUT_UP)
+	/* (pad & PAD_INPUT_UP) == 0 の原理*/
+	//0000 0000 0000 0000 0000 0000 0000 0000　基本
+	//0000 0000 0000 0000 0000 0000 0000 1000　上キーが押されたとき
+
+	bool isMove = false;	//移動しているかどうか
+
+	//移動量を持つようにする
+	Vec2 move{ 0.0f,0.0f };
+
+	if ((pad & PAD_INPUT_UP) != 0)
 	{
 		//m_pos.y -= kSpeed;
 		move.y -= kSpeed;
 		m_dir = kDirUp;
 		isMove = true;
 	}
-	if (pad & PAD_INPUT_DOWN)
+	if ((pad & PAD_INPUT_DOWN) != 0)
 	{
 		//m_pos.y += kSpeed;
 		move.y += kSpeed;
 		m_dir = kDirDown;
 		isMove = true;
 	}
-	if (pad & PAD_INPUT_LEFT)
+	if ((pad & PAD_INPUT_LEFT) != 0)
 	{
 		//m_pos.x -= kSpeed;
 		move.x -= kSpeed;
 		m_dir = kDirLeft;
 		isMove = true;
 	}
-	if (pad & PAD_INPUT_RIGHT)
+	if ((pad & PAD_INPUT_RIGHT) != 0)
 	{
 		//m_pos.x += kSpeed;
 		move.x += kSpeed;
@@ -77,63 +94,59 @@ void Player::Update()
 		isMove = true;
 	}
 
+	//斜め移動の場合も同じ速さで移動するようにする
 
-	//斜め移動の場合でも同じ速さで移動するようにする
-	
-	//ベクトルの正規化を行うためにベクトルの長さを求める
-	float moveLength = move.length();	
+	//ベクトルの正規化
+	move.normalize();
 
-	//moveLength(ベクトルの長さ)が0.0になる可能性がある	
+	//ベクトルの長さをkspeedにする
+	move *= kSpeed;
 
-	if (moveLength > 0.0f)
-	{
-		//斜め移動の場合も同じ速さで移動するようにする
-		//ベクトルの正規化
-		move.normalize();
-		//ベクトルの長さをkSpeedにする
-		//move.x *= kSpeed;
-		//move.y *= kSpeed;
-		move *=kSpeed;
+	//座標とベクトルの足し算
+	m_pos += move;
 
-		//座標とベクトルの足し算
-		//m_pos.x += move.x;
-		//m_pos.y += move.y;
-		m_pos +=move;
-	}	
+	//当たり判定の更新
+	m_colRect.Set(m_pos.x, m_pos.y, kWidth, kHeight);
 
 	if (isMove)
 	{
 		//歩きアニメーション
-		m_warkAnimFrame++;
-		if (m_warkAnimFrame >= kAnimFrameCycle) m_warkAnimFrame = 0;
+		m_walkAnimFrame++;
+		if (m_walkAnimFrame >= kAnimFrameCycle)
+		{
+			m_walkAnimFrame = 0;
+		}
+	}
+	else
+	{
+		m_walkAnimFrame = kAnimFrameNum;
 	}
 }
 
 void Player::Draw()
 {
-	int animFrame = m_warkAnimFrame / kAnimFrameNum;
+	//ダメージ演出   2フレーム間隔で表示非表示切り替え
+	//0:表示される
+	//1:表示される
+	//2:非表示
+	//3:非表示		を繰り返す
+	//%4 することで01230123...に変換する
+	if (m_damageFrame % 4 >= 2) return;
 
-	int srcX = kUseFrame[animFrame] * kWidth;
+
+	int animFrame = m_walkAnimFrame / kAnimFrameNum;
+
+	int srcX = kWidth * kUseFrame[animFrame];
 	int srcY = kHeight * m_dir;
-	//DrawGraph(static_cast<int>(m_posX), static_cast<int>(m_posY), static_cast<int>(m_handle), true);
-#if false
-	switch (m_dir)
-	{
-	case kDirDown:
-		srcY = 32 * 0;
-		break;
-	case kDirLeft:
-		srcY = 32 * 1;
-		break;
-	case kDirRight:
-		srcY = 32 * 2;
-		break;
-	case kDirUp:
-		srcY = 32 * 3;
-		break;
-	}
-#endif
+
 	DrawRectGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y),
 		srcX, srcY, kWidth, kHeight, m_handle, true);
+}
 
+void Player::OnDamage()
+{
+	//ダメージ演出中は再度ダメージを食らわない
+	if (m_damageFrame > 0)	return;
+	//演出フレーム数を設定する
+	m_damageFrame = kDamageFrame;
 }

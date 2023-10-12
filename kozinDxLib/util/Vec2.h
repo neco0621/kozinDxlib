@@ -1,93 +1,135 @@
 #pragma once
-#include<cmath>
+#include <cmath>
+//ベクトルを便利に使うためのクラス
 
-// 2次元ベクトル
+//ヘッダーファイルだけ移植すればいいようにしたいため
+//プログラムを全部ヘッダーファイルにかく
 class Vec2
 {
 public:
 	float x;
 	float y;
 
+
 public:
-	Vec2()
+	Vec2() :
+		x(0.0f),
+		y(0.0f)
 	{
-		x = 0.0f;
-		y = 0.0f;
-	}
-	Vec2(float posX, float posY)
-	{
-		x = posX;
-		y = posY;
+
 	}
 
-	// Vec2 = (Vec2 += Vec2)
-	Vec2 operator += (const Vec2& vec)
+	Vec2(float posX, float posY) :
+		x(posX),
+		y(posY)
+	{
+
+	}
+	//単項演算子+ Vec2 = +Vec2
+	Vec2 operator+ () const
+	{
+		//自身の値をそのまま返せばいい
+		return *this;
+	}
+
+	//単項演算子- Vec2 = -Vec2
+	//逆ベクトルを求めるときに使う
+	Vec2 operator- () const
+	{
+		return Vec2{ -x,-y };
+	}
+
+	//足し算
+	Vec2 operator+(Vec2 vec) const
+	{
+		return Vec2{ x + vec.x,y + vec.y };
+	}
+
+	//Vec2 += Vec2
+	Vec2 operator+= (Vec2 vec)
 	{
 		x += vec.x;
 		y += vec.y;
 		return *this;
 	}
 
-	// Vec2 = Vec2 + Vec2
-	Vec2 operator+(const Vec2& vec) const
+	//引き算
+	Vec2 operator-(Vec2 vec) const
 	{
-		Vec2 temp{ x + vec.x, y + vec.y };
-		return temp;
+		return Vec2{ x - vec.x,y - vec.y };
 	}
 
-	// Vec2 = Vec2 + 
-	Vec2 operator-(const Vec2& vec) const
+	//Vec2 -= Vec2
+	Vec2 operator-= (Vec2 vec)
 	{
-		Vec2 temp{ x - vec.x, y - vec.y };
-		return temp;
+		x -= vec.x;
+		y -= vec.y;
+		return *this;
 	}
 
-	// Vec2 = Vec2 * float
-	Vec2 operator*(float scale) const
+	//掛け算
+	Vec2 operator* (float scale) const
 	{
-		Vec2 temp{ x * scale,y * scale };
-		return temp;
+		return Vec2{ x * scale,y * scale };
 	}
 
-	// Vec2 = Vec2 *= float
-	Vec2 operator*=(float scale)
+	//Vec2 *= float;
+	Vec2 operator*= (float scale)
 	{
 		x *= scale;
 		y *= scale;
 		return *this;
 	}
 
-	// Vec2 = Vec2 / float
-	Vec2 operator/(float scale) const
+	//割り算
+	Vec2 operator/ (float scale) const
 	{
-		Vec2 temp{ x / scale,y / scale };
-		return temp;
+		return Vec2{ x / scale,y / scale };
 	}
 
-	// Vec2 = (Vec2 /= float)
-	Vec2 operator/=(float scale)
+	//Vec2 /= float;
+	Vec2 operator/= (float scale)
 	{
 		x /= scale;
 		y /= scale;
 		return *this;
 	}
 
-	// 長さの取得
-	float length()
+
+	//ベクトルの長さの2乗を求める(処理を軽くするため)
+	float sqLength() const
 	{
-		return sqrtf((x * x) + (y * y));
+		return x * x + y * y;
 	}
 
-	// 正規化 Vec2 = Vec2.normalese()
+	//ベクトルの長さを求める
+	float Length() const
+	{
+		return sqrtf(sqLength());
+	}
+
+	//自身の正規化を行う
 	void normalize()
 	{
-		float len = length();
-		if (len == 0)
+		float len = Length();
+		if (len > 0.0f)
 		{
-			return;
+			x /= len;
+			y /= len;
 		}
-		x /= len;
-		y /= len;
+		//長さ0の場合は何もしない
+	}
+
+	//自身を正規化したベクトルを取得する
+	Vec2 getNormalize() const
+	{
+		float len = Length();
+		if (len > 0.0f)
+		{
+			return Vec2{ x / len, y / len };
+		}
+		//長さが0の場合
+		return Vec2{ 0.0f,0.0f };
 	}
 };
 

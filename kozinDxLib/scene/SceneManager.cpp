@@ -8,6 +8,7 @@ SceneManager::SceneManager()
 {
 	//ƒNƒ‰ƒX‚Ìƒƒ‚ƒŠ‚ðŠm•Û‚·‚é
 	m_pMain = new SceneMain;
+
 	m_pMapEdit = new SceneMapEdit;
 }
 
@@ -37,14 +38,13 @@ void SceneManager::Update()
 {
 	Pad::Update();
 
+
 	m_pMain->Update();
 	//m_pMapEdit->Update();
-
 }
 
-void SceneManager::Draw() const
+void SceneManager::Draw()
 {
 	m_pMain->Draw();
 	//m_pMapEdit->Draw();
-
 }

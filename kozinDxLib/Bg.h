@@ -1,5 +1,6 @@
 #pragma once
 #include "Game.h"
+
 class Bg
 {
 public:
@@ -19,7 +20,7 @@ private:
 	static constexpr int kChipWidth = 32;
 	static constexpr int kChipHeight = 32;
 
-	//チップを置く数   縦１５個　横２０個
+	//チップを置く数
 	static constexpr int kChipNumX = Game::kScreenWidth / kChipWidth;
 	static constexpr int kChipNumY = Game::kScreenHeight / kChipHeight;
 

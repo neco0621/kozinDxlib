@@ -13,10 +13,10 @@ public:
 	void Init();
 	void End();
 	void Update();
-	void Draw() const;
+	void Draw();
 
 private:
 	SceneMain* m_pMain;
 	SceneMapEdit* m_pMapEdit;
-};
 
+};
