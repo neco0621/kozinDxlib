@@ -21,7 +21,10 @@ namespace
 	//一度に登場できる最大の数
 	constexpr int kEnemyMax = 64;
 	//何フレーム沖に敵が登場するか
-	constexpr int kEnemyInterval = 20;
+	constexpr int kEnemyInterval = 60;
+
+	//画面内に一度に出てくる弾の最大数
+	constexpr int kShotMax = 256;
 }
 
 SceneMain::SceneMain() :
@@ -36,7 +39,7 @@ SceneMain::SceneMain() :
 	assert(m_bgHandle != -1);
 
 	//プレイヤーのメモリ確保
-	m_pPlayer = new Player;
+	m_pPlayer = new Player{ this };
 	m_pPlayer->SetHandle(m_playerHandle);	//Playerにグラフィックハンドルを渡す
 
 	//背景のメモリ確保
@@ -66,10 +69,16 @@ SceneMain::SceneMain() :
 	}
 
 	//ショットの準備
-	m_pShot = new ShotMagicWand;
-	//SceneMainの関数を使いたいのでポインタを渡しておく
-	//thisで自身のポインタを取得可能
-	m_pShot->SetMain(this);
+	m_pShot.resize(kShotMax);
+	for (int i = 0; i < m_pShot.size(); i++)
+	{
+		m_pShot[i] = nullptr;	//未使用
+	}
+
+	//m_pShot = new ShotMagicWand;
+	////SceneMainの関数を使いたいのでポインタを渡しておく
+	////thisで自身のポインタを取得可能
+	//m_pShot->SetMain(this);
 }
 
 SceneMain::~SceneMain()
@@ -96,9 +105,15 @@ SceneMain::~SceneMain()
 			m_pEnemy[i] = nullptr;
 		}
 	}
-
-	delete m_pShot;
-	m_pShot = nullptr;
+	for (int i = 0; i < m_pShot.size(); i++)
+	{
+		if (m_pShot[i])
+		{
+			//nullptrではない場合
+			delete m_pShot[i];
+			m_pShot[i] = nullptr;
+		}
+	}
 }
 
 void SceneMain::Init()
@@ -108,10 +123,6 @@ void SceneMain::Init()
 	m_pPlayer->Init();
 
 	m_pBg->Init();
-
-	m_pShot->Init();
-
-
 }
 
 void SceneMain::End()
@@ -125,7 +136,19 @@ void SceneMain::Update()
 
 	m_pBg->Update();
 
-	m_pShot->Update();
+	for (int i = 0; i < m_pShot.size(); i++)
+	{
+		//nullptrなら処理は行わない
+		if (!m_pShot[i])		continue;
+
+		m_pShot[i]->Update();
+		//画面外に出たらメモリ解放
+		if (!m_pShot[i]->isExist())
+		{
+			delete m_pShot[i];
+			m_pShot[i] = nullptr;
+		}
+	}
 
 
 	Rect playerRect = m_pPlayer->GetColRect();
@@ -186,11 +209,6 @@ void SceneMain::Update()
 			break;
 		}
 	}
-
-	if (Pad::IsTrigger(PAD_INPUT_1))
-	{
-		m_pShot->Start(m_pPlayer->GetPos());
-	}
 }
 
 void SceneMain::Draw()
@@ -199,7 +217,11 @@ void SceneMain::Draw()
 
 	m_pPlayer->Draw();
 
-	m_pShot->Draw();
+	for (int i = 0; i < m_pShot.size(); i++)
+	{
+		if (!m_pShot[i])		continue;
+		m_pShot[i]->Draw();
+	}
 
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
@@ -269,6 +291,24 @@ Vec2 SceneMain::GetNearEnemyPos(Vec2 pos) const
 	}
 	//すべての敵のチェックを行ったのでこいつが一位で確定
 	return result;
+}
+
+bool SceneMain::AddShot(ShotBase* pShot)
+{
+	for (int i = 0; i < m_pShot.size(); i++)
+	{
+		//使用中なら次のチェックへ
+		if (m_pShot[i])	continue;
+
+		//ここに来たということはm_pShot[i] == nullptr
+		m_pShot[i] = pShot;
+		//登録したら終了
+		return true;
+	}
+
+	//ここに来た、ということはm_pShotにポインタを登録できなかった
+	delete pShot;
+	return false;
 }
 
 void SceneMain::CreateEnemyLeft()

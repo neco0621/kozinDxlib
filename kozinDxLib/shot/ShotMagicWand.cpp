@@ -1,6 +1,8 @@
 #include "ShotMagicWand.h"
 #include "Game.h"
 #include "DxLib.h"
+#include "SceneMain.h"
+#include <cassert>
 
 namespace
 {
@@ -71,10 +73,25 @@ void ShotMagicWand::Draw()
 
 void ShotMagicWand::Start(Vec2 pos)
 {
+	//SceneMainの設定忘れチェック
+	assert(m_pMain);	//m_pMain == nullptrなら止まる
+
+
 	m_isExist = true;
 	//初期配置の決定
 	m_pos = pos;
-	//仮実装　右方向に移動させる
-	m_vec.x = kSpeed;
-	m_vec.y = 0.0f;
+	//一番近い敵の方向に移動する
+
+	//ターゲット位置
+	//弾の発射位置から一番近くにいる敵の座標を取得する
+	//SceneMainに実装した関数を利用する
+	const Vec2 target = m_pMain->GetNearEnemyPos(m_pos);
+
+	//発射位置からターゲットに向かうベクトル
+	Vec2 toTarget = target - m_pos;
+	//正規化　totarget自信を正規化(長さを1に)
+	toTarget.normalize();
+	//弾の速度をkSpeedに
+	m_vec = toTarget * kSpeed;
+
 }

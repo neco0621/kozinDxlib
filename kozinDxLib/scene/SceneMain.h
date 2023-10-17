@@ -21,6 +21,10 @@ public:
 
 	//特定の座標から一番近くにいる敵の座標を返す関数
 	Vec2 GetNearEnemyPos(Vec2 pos) const;
+	//ショットを追加する
+	//登録できなかった場合はfalseを返す
+	//登録できなかった場合は内部でpShot解放する
+	bool AddShot(ShotBase* pShot);
 
 private:
 	//敵キャラクターの生成
@@ -45,8 +49,7 @@ private:
 	//EnemyBase* m_pEnemy[16];   <-今までの書き方
 
 	//ショット
-	ShotBase* m_pShot;
-
+	std::vector<ShotBase*> m_pShot;
 
 	//敵の登場間隔
 	int m_enemyInterval;

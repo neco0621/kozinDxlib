@@ -2,6 +2,7 @@
 #include "Vec2.h"
 #include "Rect.h"
 
+class SceneMain;
 class Player
 {
 public:
@@ -15,7 +16,7 @@ public:
 	};
 
 public:
-	Player();
+	Player(SceneMain* pMain);
 	~Player();
 
 	void Init();
@@ -33,6 +34,8 @@ public:
 	void OnDamage();
 
 private:
+	SceneMain* m_pMain;
+
 	int m_handle;	//グラフィックのハンドル
 
 	//表示位置
@@ -46,6 +49,9 @@ private:
 
 	//歩きアニメーション
 	int m_walkAnimFrame;
+
+	//魔法の杖の発射フレームカウント
+	int m_magicWandFrame;
 
 	//ダメージを受けてからのフレーム数
 	//当たった時にフレーム数を設定して

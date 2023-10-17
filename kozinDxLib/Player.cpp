@@ -1,6 +1,8 @@
 #include "Player.h"
 #include "DxLib.h"
 #include "Game.h"
+#include "SceneMain.h"
+#include "ShotMagicWand.h"
 
 #include <cmath>
 
@@ -25,13 +27,18 @@ namespace
 
 	//ダメージ演出フレーム数
 	constexpr int kDamageFrame = 60;
+
+	//魔法の杖の発射間隔
+	constexpr int kMagicWandFrame = 8;
 }
 
-Player::Player() :
+Player::Player(SceneMain* pMain) :
+	m_pMain(pMain),
 	m_handle(-1),
 	m_pos(Game::kScreenWidth / 2, Game::kScreenHeight / 2),
 	m_dir(kDirDown),
 	m_walkAnimFrame(0),
+	m_magicWandFrame(0),
 	m_damageFrame(0)
 {
 }
@@ -118,6 +125,22 @@ void Player::Update()
 	{
 		m_walkAnimFrame = kAnimFrameNum;
 	}
+
+	//ショット
+	m_magicWandFrame++;
+	if (m_magicWandFrame >= kMagicWandFrame)
+	{
+		m_magicWandFrame = 0;
+
+		//魔法の杖生成
+		ShotMagicWand* pShot = new ShotMagicWand;
+
+		pShot->Init();
+		pShot->SetMain(m_pMain);
+		pShot->Start(GetPos());
+		//以降更新やメモリの解放はSceneMainに任せる
+		m_pMain->AddShot(pShot);
+	}
 }
 
 void Player::Draw()
@@ -126,7 +149,8 @@ void Player::Draw()
 	//0:表示される
 	//1:表示される
 	//2:非表示
-	//3:非表示		を繰り返す
+	//3:非表示
+	//4:表示
 	//%4 することで01230123...に変換する
 	if (m_damageFrame % 4 >= 2) return;
 
