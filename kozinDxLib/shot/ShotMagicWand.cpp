@@ -8,8 +8,8 @@ namespace
 	constexpr float kSpeed = 4.0f;
 
 	//	ƒVƒ‡ƒbƒg‚Ì‘å‚«‚³
-	constexpr float kWidth = 4.0f;
-	constexpr float kHeight = 4.0f;
+	constexpr float kWidth = 8.0f;
+	constexpr float kHeight = 8.0f;
 }
 
 ShotMagicWand::ShotMagicWand()

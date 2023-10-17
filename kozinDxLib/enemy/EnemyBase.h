@@ -19,7 +19,8 @@ public:
 	void SetHandle(int handle) { m_handle = handle; }
 
 	bool isExist() const { return m_isExist; }
-
+	//ˆÊ’u‚ÌŽæ“¾
+	Vec2 GetPos() const { return m_pos; }
 	//“–‚½‚è”»’è‚Ì‹éŒ`‚ðŽæ“¾‚·‚é
 	Rect GetColRect() const { return m_colRect; }
 

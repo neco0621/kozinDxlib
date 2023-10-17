@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "Vec2.h"
 
 class Player;
 class Bg;
@@ -18,11 +19,14 @@ public:
 	void Update();
 	void Draw();
 
+	//特定の座標から一番近くにいる敵の座標を返す関数
+	Vec2 GetNearEnemyPos(Vec2 pos) const;
+
 private:
 	//敵キャラクターの生成
-	void createEnemyLeft();
-	void createEnemyRight();
-	void createEnemyToPlayer();
+	void CreateEnemyLeft();
+	void CreateEnemyRight();
+	void CreateEnemyToPlayer();
 
 private:
 	//グラフィックのハンドル

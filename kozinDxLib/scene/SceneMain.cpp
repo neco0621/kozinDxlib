@@ -67,6 +67,9 @@ SceneMain::SceneMain() :
 
 	//ショットの準備
 	m_pShot = new ShotMagicWand;
+	//SceneMainの関数を使いたいのでポインタを渡しておく
+	//thisで自身のポインタを取得可能
+	m_pShot->SetMain(this);
 }
 
 SceneMain::~SceneMain()
@@ -168,17 +171,17 @@ void SceneMain::Update()
 		switch (GetRand(2))		//0 or 1 or 2
 		{
 		case 0:		//Left
-			createEnemyLeft();
+			CreateEnemyLeft();
 
 			break;
 		case 1:		//Right
-			createEnemyRight();
+			CreateEnemyRight();
 
 			break;
 
 		default:	assert(false);		//breakなし
 		case 2:		//ToPlayer
-			createEnemyToPlayer();
+			CreateEnemyToPlayer();
 
 			break;
 		}
@@ -188,12 +191,6 @@ void SceneMain::Update()
 	{
 		m_pShot->Start(m_pPlayer->GetPos());
 	}
-#ifdef _DEBUG
-	if (CheckHitKey(KEY_INPUT_1))
-	{
-		m_pShot->Start(m_pPlayer->GetPos());
-	}
-#endif
 }
 
 void SceneMain::Draw()
@@ -211,7 +208,7 @@ void SceneMain::Draw()
 			m_pEnemy[i]->Draw();
 		}
 	}
-
+ 
 	//Debag表示
 	DrawString(8, 8, "SceneMain", GetColor(255, 255, 255));
 
@@ -221,7 +218,60 @@ void SceneMain::Draw()
 		"プレイヤーの座標(%.2f, %.2f)", playerPos.x, playerPos.y);
 }
 
-void SceneMain::createEnemyLeft()
+Vec2 SceneMain::GetNearEnemyPos(Vec2 pos) const
+{
+	//敵がいない場合は適当な座標を返す
+	Vec2 result{ 0,0 };
+	//最初の敵チェック済みフラグ
+	bool isFirst = false;
+
+
+	//一番近い敵キャラクターの座標をresultに入れる
+	for (int i = 0; i < m_pEnemy.size(); i++)
+	{
+		//使われていない敵はチェックしない
+		if (!m_pEnemy[i])	continue;
+
+		//ここにきている時点でm_pEnemy[i]はnullptrでないことは確定
+
+		//すでに消えることが確定している敵はチェックしない
+		if (!m_pEnemy[i]->isExist()) continue;
+
+		//pos とm_pEnemy[i]の距離をチェックする
+
+		if (isFirst)
+		{
+			//1体目の敵
+			//距離がいくら離れていようとも現時点では一番近い敵
+			result = m_pEnemy[i]->GetPos();
+			isFirst = false;
+		}
+		else
+		{
+			//2体目以降の敵
+			//resultの中には一番近い敵の座標が入ってくる
+
+			//今までチェックした中で一番近い敵との距離
+			Vec2 toNear = result - pos;	//posから暫定一位の座標に向かうベクトル
+
+			//チェックする敵との距離
+			Vec2 toEnemy = m_pEnemy[i]->GetPos() - pos;	//posからチェック中の敵に向かうベクトル
+
+			//処理を軽くするため居y理の比較を行う場合は距離の2乗で比較を行う
+			if (toNear.sqLength() > toEnemy.sqLength())
+			{
+				//今チェックしている敵への距離が暫定一位よりも短い場合
+				//今チェックしている敵を暫定一位に
+				result = m_pEnemy[i]->GetPos();
+			}
+			//暫定一位の方が今チェックしている敵より近い場合は何もしない
+		}
+	}
+	//すべての敵のチェックを行ったのでこいつが一位で確定
+	return result;
+}
+
+void SceneMain::CreateEnemyLeft()
 {
 	//使われていない箱を探してそこにアドレスを保存する
 	for (int i = 0; i < m_pEnemy.size(); i++)
@@ -237,7 +287,7 @@ void SceneMain::createEnemyLeft()
 	}
 }
 
-void SceneMain::createEnemyRight()
+void SceneMain::CreateEnemyRight()
 {
 	//使われていない箱を探してそこにアドレスを保存する
 	for (int i = 0; i < m_pEnemy.size(); i++)
@@ -253,7 +303,7 @@ void SceneMain::createEnemyRight()
 	}
 }
 
-void SceneMain::createEnemyToPlayer()
+void SceneMain::CreateEnemyToPlayer()
 {
 	//使われていない箱を探してそこにアドレスを保存する
 	for (int i = 0; i < m_pEnemy.size(); i++)

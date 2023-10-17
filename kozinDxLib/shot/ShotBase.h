@@ -2,6 +2,8 @@
 #include "Vec2.h"
 #include "Rect.h"
 
+class SceneMain;
+
 //プレイヤーの攻撃の基底クラス
 class ShotBase
 {
@@ -13,6 +15,8 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 
+	void SetMain(SceneMain* pMain) { m_pMain = pMain; }
+
 	bool isExist() const { return m_isExist; }
 
 	//当たり判定の矩形を取得する
@@ -23,6 +27,9 @@ public:
 	virtual void Start(Vec2 pos) = 0;
 
 protected:
+	//SceneMainの関数を呼び出すためにポインタを覚えておく
+	SceneMain* m_pMain;
+
 	bool m_isExist;	//存在するかフラグ(使用中かどうか)
 
 	//表示位置
