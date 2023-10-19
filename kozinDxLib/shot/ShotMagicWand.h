@@ -2,6 +2,8 @@
 #include "ShotBase.h"
 #include "vec2.h"
 
+#include <vector>
+
 class ShotMagicWand :
 	public ShotBase
 {
@@ -15,5 +17,9 @@ public:
 
 	//弾をスタートさせる
 	virtual void Start(Vec2 pos) override;
+
+private:
+	//残像を表示するために過去の位置を覚えておく
+	std::vector<Vec2>  m_posLog;
 };
 

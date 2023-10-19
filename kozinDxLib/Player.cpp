@@ -29,7 +29,7 @@ namespace
 	constexpr int kDamageFrame = 60;
 
 	//–‚–@‚Ìñ‚Ì”­ËŠÔŠu
-	constexpr int kMagicWandFrame = 8;
+	constexpr int kMagicWandFrame = 30;
 }
 
 Player::Player(SceneMain* pMain) :
