@@ -149,6 +149,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Rect.cpp" />
     <ClCompile Include="shot\ShotBase.cpp" />
+    <ClCompile Include="shot\ShotBible.cpp" />
     <ClCompile Include="shot\ShotMagicWand.cpp" />
     <ClCompile Include="util\Pad.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="shot\ShotBase.h" />
+    <ClInclude Include="shot\ShotBible.h" />
     <ClInclude Include="shot\ShotMagicWand.h" />
     <ClInclude Include="util\Pad.h" />
     <ClInclude Include="Player.h" />

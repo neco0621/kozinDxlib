@@ -3,6 +3,7 @@
 #include "Rect.h"
 
 class SceneMain;
+class Player;
 
 //プレイヤーの攻撃の基底クラス
 class ShotBase
@@ -16,6 +17,7 @@ public:
 	virtual void Draw() = 0;
 
 	void SetMain(SceneMain* pMain) { m_pMain = pMain; }
+	void SetPlayer(Player* pPlayer) { m_pPlayer = pPlayer; }
 
 	bool isExist() const { return m_isExist; }
 
@@ -29,6 +31,8 @@ public:
 protected:
 	//SceneMainの関数を呼び出すためにポインタを覚えておく
 	SceneMain* m_pMain;
+	//ショットを撃ったプレイヤーのポインタを覚えておく
+	Player* m_pPlayer;
 
 	bool m_isExist;	//存在するかフラグ(使用中かどうか)
 

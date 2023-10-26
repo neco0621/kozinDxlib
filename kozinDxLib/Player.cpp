@@ -1,8 +1,10 @@
 #include "Player.h"
 #include "DxLib.h"
+#include "Pad.h"
 #include "Game.h"
 #include "SceneMain.h"
 #include "ShotMagicWand.h"
+#include "ShotBible.h"
 
 #include <cmath>
 
@@ -137,10 +139,29 @@ void Player::Update()
 
 		pShot->Init();
 		pShot->SetMain(m_pMain);
+		pShot->SetPlayer(this);
 		pShot->Start(GetPos());
 		//以降更新やメモリの解放はSceneMainに任せる
 		m_pMain->AddShot(pShot);
 	}
+
+	//聖書テスト実装
+	//ボタンを押したら発生するようにする
+	if (Pad::IsTrigger(PAD_INPUT_1))
+	{
+		//聖書メモリの確保
+		ShotBible* pShot = new ShotBible;
+
+		pShot->Init();
+		pShot->SetMain(m_pMain);
+		pShot->SetPlayer(this);
+		pShot->Start(GetPos());
+		//以降更新やメモリの解放はSceneMainに任せる
+		m_pMain->AddShot(pShot);
+
+	}
+
+
 }
 
 void Player::Draw()
