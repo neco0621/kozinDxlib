@@ -9,13 +9,15 @@ namespace
 	constexpr int kWidth = 16;
 	constexpr int kHeight = 24;
 	//発生してから消えるまでのフレーム数
-	constexpr int kExistFrame = 60;
+	constexpr int kExistFrame = 60 * 5;
+	//プレイヤーの周りを1回転するのにかかるフレーム数
+	constexpr float kRotFrame = 60;
 
 	//プレイヤーの周りを回る時の半径
 	constexpr float kRadius = 100.0f;
 
 	//プレイヤーから見た相対位置をデータとして持つ
-	const Vec2 k0ffset[4] =
+	const Vec2 k0ffset[] =
 	{
 		Vec2{kRadius	, 0.0f		},//右
 		Vec2{0.0f		,kRadius	},//下
@@ -25,7 +27,8 @@ namespace
 }
 
 ShotBible::ShotBible() :
-	m_frameCount(0)
+	m_frameCount(0),
+	m_angle(0)
 {
 }
 
@@ -54,19 +57,23 @@ void ShotBible::Update()
 	//移動処理
 	//プレイヤーの位置によって表示する場所が変わる
 	//プレイヤーの位置情報が欲しい
-
-	//消えるまでの進行度を割合に変換する
-	float progress = static_cast<float>(m_frameCount) / static_cast<float>(kExistFrame);
-	//進行度*要素数で何番目の要素を使用するか決める
-	int index = progress * _countof(k0ffset);
 	
+	//プレイヤーから見た角度の更新
+	//kRotFrame かけて1回転する
+	m_angle += DX_TWO_PI_F / kRotFrame;
+
 	//k0ffset[index] と プレイヤーの位置から最終的な所との位置を決定する
-	m_pos = m_pPlayer->GetPos() + k0ffset[index];
+	//m_pos = m_pPlayer->GetPos() + k0ffset[index];
+	//m_pos : ショットの位置	今回はこれをcos, sinで生成する
+	//m_pPlayer->GetPos() : 回転の中心位置
+	//m_angle : 真左を0とした場合の回転角度
+	//kRadius : 回転半径
 
-	//index:k0ffsetの何番目のデータを使うか
-	//_countof():配列の要素数を取得する
-	//int index = m_frameCount % _countof(k0ffset);
+	Vec2 offset;	//プレイヤーから見た位置
+	offset.x = cosf(m_angle) * kRadius;
+	offset.y = sinf(m_angle) * kRadius;
 
+	m_pos = m_pPlayer->GetPos() + offset;
 }
 
 void ShotBible::Draw()
